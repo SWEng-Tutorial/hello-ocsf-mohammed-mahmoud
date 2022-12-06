@@ -7,6 +7,7 @@ import il.cshaifasweng.OCSFMediatorExample.server.ocsf.SubscribedClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
@@ -49,17 +50,27 @@ public class SimpleServer extends AbstractServer {
 			}
 			else if(request.startsWith("send Submitters IDs")){
 				//add code here to send submitters IDs to client
+				message.setMessage("207502733, 207406968");
+				client.sendToClient(message);
 			}
 			else if (request.startsWith("send Submitters")){
 				//add code here to send submitters names to client
+				message.setMessage("Mahmoud Hassan, Mohammed Khalil");
+				client.sendToClient(message);
 			}
 			else if (request.equals("what day it is?")) {
 				//add code here to send the date to client
+				message.setMessage(new Date().toString());
+				client.sendToClient(message);
 			}
 			else if (request.startsWith("add")){
 				//add code here to sum 2 numbers received in the message and send result back to client
 				//(use substring method as shown above)
 				//message format: "add n+m"
+				String equation=message.getMessage().replaceAll("add ","");
+				String[] equationArray=equation.split("\\+");
+				message.setMessage(""+(Integer.parseInt(equationArray[0])+Integer.parseInt(equationArray[1])));
+				client.sendToClient(message);
 			}else{
 				//add code here to send received message to all clients.
 				//The string we received in the message is the message we will send back to all clients subscribed.
@@ -67,6 +78,8 @@ public class SimpleServer extends AbstractServer {
 					// message received: "Good morning"
 					// message sent: "Good morning"
 				//see code for changing submitters IDs for help
+				message.setMessage(message.getMessage());
+				sendToAllClients(message);
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
